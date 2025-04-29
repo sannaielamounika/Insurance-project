@@ -15,5 +15,10 @@ public class InsureMeApplication implements CommandLineRunner {
         SpringApplication.run(InsureMeApplication.class, args);
     }
 
-    // Preload some sample data into the H2 database
     @Override
+    public void run(String... args) throws Exception {
+        policyRepository.save(new Policy(0, "Alice", "Health", 12000, "01-Jan-2023", "31-Dec-2023"));
+        policyRepository.save(new Policy(0, "Bob", "Life", 15000, "01-Feb-2023", "31-Jan-2024"));
+        policyRepository.save(new Policy(0, "Charlie", "Car", 8000, "15-Mar-2023", "14-Mar-2024"));
+    }
+}
