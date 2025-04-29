@@ -3,7 +3,7 @@ package com.project.staragile.insureme;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class PolicyTestNGTest {
+public class PolicyTest {
 
     @Test
     public void testPolicyGetterSetter() {
