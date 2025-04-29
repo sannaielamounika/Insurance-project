@@ -5,6 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PolicyRepository extends JpaRepository<Policy, Integer> {
-    // JpaRepository already provides basic CRUD methods, no additional methods are needed
+    // You can define custom queries here if needed in the future.
 }
-

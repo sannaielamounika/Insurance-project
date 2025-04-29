@@ -1,46 +1,37 @@
 package com.project.staragile.insureme;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/policy")
+@RequestMapping("/api")
 public class PolicyController {
 
     @Autowired
     private PolicyService policyService;
 
-    // Create Policy
+    // a. Create Policy - POST
     @PostMapping("/createPolicy")
     public Policy createPolicy(@RequestBody Policy policy) {
-        return policyService.createPolicy(policy);
+        return policyService.registerPolicy(policy);
     }
 
-    // Update Policy
+    // b. Update Policy - PUT
     @PutMapping("/updatePolicy/{policyId}")
-    public ResponseEntity<Policy> updatePolicy(@PathVariable int policyId, @RequestBody Policy updatedPolicy) {
-        Optional<Policy> policy = policyService.updatePolicy(policyId, updatedPolicy);
-        return policy.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Policy updatePolicy(@PathVariable int policyId, @RequestBody Policy updatedPolicy) {
+        return policyService.updatePolicy(policyId, updatedPolicy);
     }
 
-    // View Policy
+    // c. View Policy - GET
     @GetMapping("/viewPolicy/{policyId}")
-    public ResponseEntity<Policy> viewPolicy(@PathVariable int policyId) {
-        Optional<Policy> policy = policyService.getPolicyById(policyId);
-        return policy.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public Policy getPolicy(@PathVariable int policyId) {
+        return policyService.getPolicyDetails(policyId);
     }
 
-    // Delete Policy
+    // d. Delete Policy - DELETE
     @DeleteMapping("/deletePolicy/{policyId}")
-    public ResponseEntity<String> deletePolicy(@PathVariable int policyId) {
-        boolean deleted = policyService.deletePolicy(policyId);
-        if (deleted) {
-            return ResponseEntity.ok("Policy deleted successfully.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public String deletePolicy(@PathVariable int policyId) {
+        policyService.deletePolicy(policyId);
+        return "Policy with ID " + policyId + " deleted successfully.";
     }
 }

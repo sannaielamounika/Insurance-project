@@ -11,30 +11,33 @@ public class PolicyService {
     @Autowired
     private PolicyRepository policyRepository;
 
-    public Policy createPolicy(Policy policy) {
+    // Method to create and save a new policy
+    public Policy createPolicy() {
+        Policy policy = generateDummyPolicy();
         return policyRepository.save(policy);
     }
 
-    public Optional<Policy> getPolicyById(int policyId) {
-        return policyRepository.findById(policyId);
-    }
-
-    public Optional<Policy> updatePolicy(int policyId, Policy updatedPolicy) {
-        return policyRepository.findById(policyId).map(policy -> {
-            policy.setPolicyHolderName(updatedPolicy.getPolicyHolderName());
-            policy.setPolicyType(updatedPolicy.getPolicyType());
-            policy.setPolicyPrice(updatedPolicy.getPolicyPrice());
-            policy.setPolicyStartDate(updatedPolicy.getPolicyStartDate());
-            policy.setPolicyEndDate(updatedPolicy.getPolicyEndDate());
-            return policyRepository.save(policy);
-        });
-    }
-
-    public boolean deletePolicy(int policyId) {
-        if (policyRepository.existsById(policyId)) {
-            policyRepository.deleteById(policyId);
-            return true;
+    // Method to update an existing policy by ID
+    public Policy updatePolicy(int policyId, Policy updatedPolicy) {
+        Optional<Policy> existingPolicyOpt = policyRepository.findById(policyId);
+        if (existingPolicyOpt.isPresent()) {
+            Policy existingPolicy = existingPolicyOpt.get();
+            existingPolicy.setPolicyHolderName(updatedPolicy.getPolicyHolderName());
+            existingPolicy.setPolicyType(updatedPolicy.getPolicyType());
+            existingPolicy.setPolicyPrice(updatedPolicy.getPolicyPrice());
+            existingPolicy.setPolicyStartDate(updatedPolicy.getPolicyStartDate());
+            existingPolicy.setPolicyEndDate(updatedPolicy.getPolicyEndDate());
+            return policyRepository.save(existingPolicy);
+        } else {
+            return null;  // Or throw exception if needed
         }
-        return false;
     }
-}
+
+    // Method to delete an existing policy by ID
+    public boolean deletePolicy(int policyId) {
+        Optional<Policy> existingPolicyOpt = policyRepository.findById(policyId);
+        if (existingPolicyOpt.isPresent()) {
+            policyRepository.delete(existingPolicyOpt.get());
+            return true;
+        } else {
+            return false;  // Or throw exc

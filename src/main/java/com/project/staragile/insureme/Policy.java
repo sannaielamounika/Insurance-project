@@ -1,15 +1,15 @@
 package com.project.staragile.insureme;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class Policy {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int policyId;
 
     private String policyHolderName;
@@ -18,12 +18,13 @@ public class Policy {
     private String policyStartDate;
     private String policyEndDate;
 
+    // Default constructor
     public Policy() {
-        // Default constructor
     }
 
-    public Policy(int policyId, String policyHolderName, String policyType,
-                  double policyPrice, String policyStartDate, String policyEndDate) {
+    // All-args constructor
+    public Policy(int policyId, String policyHolderName, String policyType, double policyPrice,
+                  String policyStartDate, String policyEndDate) {
         this.policyId = policyId;
         this.policyHolderName = policyHolderName;
         this.policyType = policyType;
@@ -32,6 +33,7 @@ public class Policy {
         this.policyEndDate = policyEndDate;
     }
 
+    // Getters and setters
     public int getPolicyId() {
         return policyId;
     }
