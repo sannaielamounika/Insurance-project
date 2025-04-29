@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy to AWS') {
             steps {
                 script {
-                    sh 'ansible-playbook -i hosts.ini deploy.yml'
+                    sh 'ansible-playbook -i hosts.ini ansible-playbook.yml'
                 }
             }
         }
