@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'insurance-node' }
 
     environment {
         DOCKER_IMAGE = "sannaielamounika/insure-me"
