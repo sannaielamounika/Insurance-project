@@ -20,8 +20,8 @@ public class InsureMeApplicationTests {
 
     @BeforeEach
     public void setUp() {
-        // Setup test data before each test
-        testPolicy = new Policy(0, "Sreyansh Nandan, "Travel Insurance", 5000.0, "2024-05-01", "2025-05-01");
+        // Corrected string syntax
+        testPolicy = new Policy(0, "Sreyansh Nandan", "Travel Insurance", 5000.0, "2024-05-01", "2025-05-01");
     }
 
     @Test
@@ -33,9 +33,7 @@ public class InsureMeApplicationTests {
 
     @Test
     public void testViewPolicy() {
-        // First create a policy
         Policy createdPolicy = restTemplate.postForObject("/policy/createPolicy", testPolicy, Policy.class);
-        // Then fetch it by its ID
         ResponseEntity<Policy> response = restTemplate.getForEntity("/policy/viewPolicy/" + createdPolicy.getPolicyId(), Policy.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -43,14 +41,9 @@ public class InsureMeApplicationTests {
 
     @Test
     public void testUpdatePolicy() {
-        // First create a policy
         Policy createdPolicy = restTemplate.postForObject("/policy/createPolicy", testPolicy, Policy.class);
-
-        // Modify the policy and update it
         createdPolicy.setPolicyHolderName("Sreyansh Nandan Updated");
         restTemplate.put("/policy/updatePolicy/" + createdPolicy.getPolicyId(), createdPolicy);
-
-        // Fetch the updated policy and verify
         ResponseEntity<Policy> response = restTemplate.getForEntity("/policy/viewPolicy/" + createdPolicy.getPolicyId(), Policy.class);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Sreyansh Nandan Updated", response.getBody().getPolicyHolderName());
@@ -58,13 +51,8 @@ public class InsureMeApplicationTests {
 
     @Test
     public void testDeletePolicy() {
-        // First create a policy
         Policy createdPolicy = restTemplate.postForObject("/policy/createPolicy", testPolicy, Policy.class);
-
-        // Delete the policy
         restTemplate.delete("/policy/deletePolicy/" + createdPolicy.getPolicyId());
-
-        // Verify the policy is deleted
         ResponseEntity<Policy> response = restTemplate.getForEntity("/policy/viewPolicy/" + createdPolicy.getPolicyId(), Policy.class);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
