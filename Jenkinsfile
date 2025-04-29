@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "sannaielamounika/insure-me"
-        DOCKER_TAG = "latest"
+        DOCKER_TAG   = "latest"
     }
 
     stages {
@@ -12,33 +12,40 @@ pipeline {
                 git 'https://github.com/sannaielamounika/Insurance-project.git'
             }
         }
+
         stage('Build Application') {
             steps {
-                script {
-                    sh 'mvn clean install'
-                }
+                sh 'mvn clean install'
             }
         }
+
         stage('Dockerize Application') {
             steps {
-                script {
-                    sh 'docker build -t $DOCKER_IMAGE:$DOCKER_TAG .'
-                    sh 'docker push $DOCKER_IMAGE:$DOCKER_TAG'
-                }
+                sh """
+                   docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+                   docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
+                """
             }
         }
+
         stage('Deploy to AWS') {
             steps {
-                script {
-                    sh 'ansible-playbook -i ansible/hosts.ini ansible/ansible-playbook.yml --private-key /home/ubuntu/key.pem -e "ansible_ssh_extra_args=\'-o StrictHostKeyChecking=no\'"'
+                // Fetch the private key from Jenkins credentials (set up as "aws-ssh-key")
+                withCredentials([file(credentialsId: 'aws-ssh-key', variable: 'PRIVATE_KEY_PATH')]) {
+                    sh """
+                       ansible-playbook \
+                         -i ansible/hosts.ini \
+                         ansible/ansible-playbook.yml \
+                         --private-key ${PRIVATE_KEY_PATH} \
+                         -e 'ansible_ssh_extra_args="-o StrictHostKeyChecking=no"'
+                    """
                 }
             }
         }
+
         stage('Test Deployment') {
             steps {
-                script {
-                    sh 'python3 selenium-test.py'
-                }
+                sh 'pip3 install selenium && python3 selenium-test.py'
             }
         }
     }
@@ -52,4 +59,3 @@ pipeline {
         }
     }
 }
-
