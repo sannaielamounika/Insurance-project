@@ -30,7 +30,7 @@ pipeline {
         stage('Deploy to AWS') {
             steps {
                 script {
-                    sh 'ansible-playbook -i ansible/hosts.ini ansible/ansible-playbook.yml -e "ansible_ssh_extra_args=\'-o StrictHostKeyChecking=no\'"'
+                    sh 'ansible-playbook -i ansible/hosts.ini ansible/ansible-playbook.yml --private-key /home/ubuntu/key.pem -e "ansible_ssh_extra_args=\'-o StrictHostKeyChecking=no\'"'
                 }
             }
         }
