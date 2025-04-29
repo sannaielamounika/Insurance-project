@@ -1,0 +1,21 @@
+---
+- name: Deploy InsureMe app to AWS EC2
+  hosts: ec2_instances
+  become: yes
+  tasks:
+    - name: Pull the Docker image from Docker Hub
+      docker_image:
+        name: sannaielamounika/insure-me
+        tag: latest
+        source: pull
+
+    - name: Run the Docker container
+      docker_container:
+        name: insure-me-app
+        image: sannaielamounika/insure-me:latest
+        state: started
+        exposed_ports:
+          - "8080"
+        published_ports:
+          - "8080:8080"
+
