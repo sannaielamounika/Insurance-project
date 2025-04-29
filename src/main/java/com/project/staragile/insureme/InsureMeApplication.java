@@ -1,14 +1,13 @@
 package com.project.staragile.insureme;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootTest
-class InsureMeApplicationTests {
+@SpringBootApplication
+public class InsureMeApplication {
 
-    @Test
-    void contextLoads() {
-        // Dummy test to verify Spring context loads
+    public static void main(String[] args) {
+        SpringApplication.run(InsureMeApplication.class, args);
     }
 }
 
