@@ -3,51 +3,38 @@ package com.project.staragile.insureme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 
 @Service
 public class PolicyService {
-	
-	@Autowired
-	PolicyRepository policyRepository;
-	
-	
-	public Policy CreatePolicy() {
-		
-		Policy policy = generateDummyPolicy();
-		
-		return policyRepository.save(policy);
-		
-			
-	}
-	
-	public Policy updatePolicy() {
-		
-		return null;
-	}
-	
-	public Policy deletePolicy() {
-		
-		return null;
-	}
-	
-	public Policy searchPolicy() {
-		
-		return null;
-	}
-	
-	
-	public Policy generateDummyPolicy() {
-		return new Policy(1, "Shubham", "Individual" , 10000, "10-Sep-2021", "10-Sep-2022");
-	}
 
-	public Policy registerPolicy(Policy policy) {
-		// TODO Auto-generated method stub
-		return policyRepository.save(policy);
-	}
+    @Autowired
+    private PolicyRepository policyRepository;
 
-	public Policy getPolicyDetails(int policyId) {
-		// TODO Auto-generated method stub
-		return policyRepository.findById(policyId).get();
-	}
+    public Policy createPolicy(Policy policy) {
+        return policyRepository.save(policy);
+    }
 
+    public Optional<Policy> getPolicyById(int policyId) {
+        return policyRepository.findById(policyId);
+    }
+
+    public Optional<Policy> updatePolicy(int policyId, Policy updatedPolicy) {
+        return policyRepository.findById(policyId).map(policy -> {
+            policy.setPolicyHolderName(updatedPolicy.getPolicyHolderName());
+            policy.setPolicyType(updatedPolicy.getPolicyType());
+            policy.setPolicyPrice(updatedPolicy.getPolicyPrice());
+            policy.setPolicyStartDate(updatedPolicy.getPolicyStartDate());
+            policy.setPolicyEndDate(updatedPolicy.getPolicyEndDate());
+            return policyRepository.save(policy);
+        });
+    }
+
+    public boolean deletePolicy(int policyId) {
+        if (policyRepository.existsById(policyId)) {
+            policyRepository.deleteById(policyId);
+            return true;
+        }
+        return false;
+    }
 }

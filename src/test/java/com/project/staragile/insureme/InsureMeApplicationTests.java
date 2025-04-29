@@ -1,31 +1,71 @@
 package com.project.staragile.insureme;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-@SpringBootTest
-class InsureMeApplicationTests {
+import static org.junit.jupiter.api.Assertions.*;
 
-	@Test
-	void contextLoads() {
-	}
-	
-	@Test
-	void testCreatePolicy() {
-		Policy policy = new Policy(1, "Shubham", "Individual" , 10000, "10-Sep-2021", "10-Sep-2022");
-		PolicyService pService = new PolicyService();
-		//Policy outputPolicy = pService.CreatePolicy();
-		assertEquals(policy.getPolicyId(), pService.generateDummyPolicy().getPolicyId());
-		
-	}
-	
-	@Test
-	void testSearchPolicy() {
-		PolicyService pService = new PolicyService();
-		assertEquals(null,pService.searchPolicy());
-	}
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public class InsureMeApplicationTests {
 
-	
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    private Policy testPolicy;
+
+    @BeforeEach
+    public void setUp() {
+        // Setup test data before each test
+        testPolicy = new Policy(0, "Sreyansh Nandan, "Travel Insurance", 5000.0, "2024-05-01", "2025-05-01");
+    }
+
+    @Test
+    public void testCreatePolicy() {
+        ResponseEntity<Policy> response = restTemplate.postForEntity("/policy/createPolicy", testPolicy, Policy.class);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody().getPolicyId());
+    }
+
+    @Test
+    public void testViewPolicy() {
+        // First create a policy
+        Policy createdPolicy = restTemplate.postForObject("/policy/createPolicy", testPolicy, Policy.class);
+        // Then fetch it by its ID
+        ResponseEntity<Policy> response = restTemplate.getForEntity("/policy/viewPolicy/" + createdPolicy.getPolicyId(), Policy.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+    }
+
+    @Test
+    public void testUpdatePolicy() {
+        // First create a policy
+        Policy createdPolicy = restTemplate.postForObject("/policy/createPolicy", testPolicy, Policy.class);
+
+        // Modify the policy and update it
+        createdPolicy.setPolicyHolderName("Sreyansh Nandan Updated");
+        restTemplate.put("/policy/updatePolicy/" + createdPolicy.getPolicyId(), createdPolicy);
+
+        // Fetch the updated policy and verify
+        ResponseEntity<Policy> response = restTemplate.getForEntity("/policy/viewPolicy/" + createdPolicy.getPolicyId(), Policy.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Sreyansh Nandan Updated", response.getBody().getPolicyHolderName());
+    }
+
+    @Test
+    public void testDeletePolicy() {
+        // First create a policy
+        Policy createdPolicy = restTemplate.postForObject("/policy/createPolicy", testPolicy, Policy.class);
+
+        // Delete the policy
+        restTemplate.delete("/policy/deletePolicy/" + createdPolicy.getPolicyId());
+
+        // Verify the policy is deleted
+        ResponseEntity<Policy> response = restTemplate.getForEntity("/policy/viewPolicy/" + createdPolicy.getPolicyId(), Policy.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }

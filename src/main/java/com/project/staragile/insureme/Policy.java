@@ -1,94 +1,82 @@
 package com.project.staragile.insureme;
 
-import javax.annotation.Generated;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Policy {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int policyId;
-	
-	private String policyHolderName;
-	
-	private String policyType;
-	
-	private double policyPrice;
-	
-	private String policyStartDate;
-	
-	private String policyEndDate;
-	
-	
 
-	public Policy() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int policyId;
 
-	public Policy(int policyId, String policyHolderName, String policyType, double policyPrice, String policyStartDate,
-			String policyEndDate) {
-		super();
-		this.policyId = policyId;
-		this.policyHolderName = policyHolderName;
-		this.policyType = policyType;
-		this.policyPrice = policyPrice;
-		this.policyStartDate = policyStartDate;
-		this.policyEndDate = policyEndDate;
-	}
+    private String policyHolderName;
+    private String policyType;
+    private double policyPrice;
+    private String policyStartDate;
+    private String policyEndDate;
 
-	public int getPolicyId() {
-		return policyId;
-	}
+    public Policy() {
+        // Default constructor
+    }
 
-	public void setPolicyId(int policyId) {
-		this.policyId = policyId;
-	}
+    public Policy(int policyId, String policyHolderName, String policyType,
+                  double policyPrice, String policyStartDate, String policyEndDate) {
+        this.policyId = policyId;
+        this.policyHolderName = policyHolderName;
+        this.policyType = policyType;
+        this.policyPrice = policyPrice;
+        this.policyStartDate = policyStartDate;
+        this.policyEndDate = policyEndDate;
+    }
 
-	public String getPolicyHolderName() {
-		return policyHolderName;
-	}
+    public int getPolicyId() {
+        return policyId;
+    }
 
-	public void setPolicyHolderName(String policyHolderName) {
-		this.policyHolderName = policyHolderName;
-	}
+    public void setPolicyId(int policyId) {
+        this.policyId = policyId;
+    }
 
-	public String getPolicyType() {
-		return policyType;
-	}
+    public String getPolicyHolderName() {
+        return policyHolderName;
+    }
 
-	public void setPolicyType(String policyType) {
-		this.policyType = policyType;
-	}
+    public void setPolicyHolderName(String policyHolderName) {
+        this.policyHolderName = policyHolderName;
+    }
 
-	public double getPolicyPrice() {
-		return policyPrice;
-	}
+    public String getPolicyType() {
+        return policyType;
+    }
 
-	public void setPolicyPrice(double policyPrice) {
-		this.policyPrice = policyPrice;
-	}
+    public void setPolicyType(String policyType) {
+        this.policyType = policyType;
+    }
 
-	public String getPolicyStartDate() {
-		return policyStartDate;
-	}
+    public double getPolicyPrice() {
+        return policyPrice;
+    }
 
-	public void setPolicyStartDate(String policyStartDate) {
-		this.policyStartDate = policyStartDate;
-	}
+    public void setPolicyPrice(double policyPrice) {
+        this.policyPrice = policyPrice;
+    }
 
-	public String getPolicyEndDate() {
-		return policyEndDate;
-	}
+    public String getPolicyStartDate() {
+        return policyStartDate;
+    }
 
-	public void setPolicyEndDate(String policyEndDate) {
-		this.policyEndDate = policyEndDate;
-	}
-	
-	
+    public void setPolicyStartDate(String policyStartDate) {
+        this.policyStartDate = policyStartDate;
+    }
 
+    public String getPolicyEndDate() {
+        return policyEndDate;
+    }
+
+    public void setPolicyEndDate(String policyEndDate) {
+        this.policyEndDate = policyEndDate;
+    }
 }
