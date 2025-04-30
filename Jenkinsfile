@@ -30,6 +30,7 @@ pipeline {
 
         stage('Deploy to AWS') {
             steps {
+                // Uses "Ubuntu-ssh-key" credential of type SSH Username with private key
                 sshagent(['ubuntu-ssh-key']) {
                     sh """
                        ansible-playbook \
@@ -43,17 +44,30 @@ pipeline {
 
         stage('Test Deployment') {
             steps {
-                sh 'pip3 install selenium && python3 selenium-test.py'
+                script {
+                    // Ensure pip3 is installed on the agent
+                    sh '''
+                      if ! command -v pip3 >/dev/null 2>&1; then
+                        sudo apt-get update -y
+                        sudo apt-get install -y python3-pip
+                      fi
+                    '''
+                    // Install Selenium and run the test
+                    sh '''
+                      pip3 install selenium
+                      python3 selenium-test.py
+                    '''
+                }
             }
         }
     }
 
     post {
         success {
-            echo "Deployment was successful"
+            echo "✅ Deployment was successful"
         }
         failure {
-            echo "Deployment failed"
+            echo "❌ Deployment failed"
         }
     }
 }
