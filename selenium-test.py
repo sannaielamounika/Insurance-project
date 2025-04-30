@@ -14,7 +14,7 @@ def test_application():
 
     # start Chrome
     driver = webdriver.Chrome(options=chrome_options)
-    driver.get("http://<EC2-IP>:8080")  # replace with your actual EC2 DNS/IP and port
+    driver.get("http://ec2-52-4-82-198.compute-1.amazonaws.com:8080")  # replace with your actual EC2 DNS/IP and port
     assert "InsureMe" in driver.title
     driver.quit()
 
