@@ -30,13 +30,11 @@ pipeline {
 
         stage('Deploy to AWS') {
             steps {
-                // Fetch the private key from Jenkins credentials (set up as "aws-ssh-key")
-                withCredentials([file(credentialsId: 'ubuntu-ssh-key', variable: 'PRIVATE_KEY_PATH')]) {
+                sshagent(['ubuntu-ssh-key']) {
                     sh """
                        ansible-playbook \
                          -i ansible/hosts.ini \
                          ansible/ansible-playbook.yml \
-                         --private-key ${PRIVATE_KEY_PATH} \
                          -e 'ansible_ssh_extra_args="-o StrictHostKeyChecking=no"'
                     """
                 }
