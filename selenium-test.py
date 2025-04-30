@@ -14,7 +14,7 @@ def test_application():
 
     # start Chrome
     driver = webdriver.Chrome(options=chrome_options)
-    driver.get("http://ec2-52-4-82-198.compute-1.amazonaws.com:8080")
+    driver.get("http://ec2-52-4-82-198.compute-1.amazonaws.com:8085")
 
     # Debug: print the actual title to Jenkins logs
     print("Page title is:", driver.title)
