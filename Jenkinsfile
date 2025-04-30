@@ -43,14 +43,15 @@ pipeline {
 
     stage('Test Deployment') {
       steps {
-        // Run Selenium test in a Python container with Chrome & chromedriver
+        // Run Selenium test inside a Python container with Chrome & chromedriver
         sh """
           docker run --rm \\
+            --shm-size=1g \\
             -v "\$PWD":/workspace \\
             -w /workspace \\
             python:3.9-slim-buster bash -eux -c '
               apt-get update && \
-              apt-get install -y chromium-driver chromium wget gnupg && \
+              apt-get install -y chromium chromium-driver && \
               pip install selenium && \
               python3 selenium-test.py
             '

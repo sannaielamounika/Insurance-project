@@ -1,9 +1,23 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 def test_application():
-    driver = webdriver.Chrome()
-    driver.get("http://<EC2-IP>:8080")
+    chrome_options = Options()
+    # run in headless mode
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("window-size=1920,1080")
+
+    # point to the chromium binary
+    chrome_options.binary_location = "/usr/bin/chromium"
+
+    # start Chrome
+    driver = webdriver.Chrome(options=chrome_options)
+    driver.get("http://<EC2-IP>:8080")  # replace with your actual EC2 DNS/IP and port
     assert "InsureMe" in driver.title
     driver.quit()
 
-test_application()
+if __name__ == "__main__":
+    test_application()
+
