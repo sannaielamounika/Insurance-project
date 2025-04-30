@@ -30,7 +30,6 @@ pipeline {
 
         stage('Deploy to AWS') {
             steps {
-                // Uses "Ubuntu-ssh-key" credential of type SSH Username with private key
                 sshagent(['ubuntu-ssh-key']) {
                     sh """
                        ansible-playbook \
@@ -44,20 +43,14 @@ pipeline {
 
         stage('Test Deployment') {
             steps {
-                script {
-                    // Ensure pip3 is installed on the agent
-                    sh '''
-                      if ! command -v pip3 >/dev/null 2>&1; then
-                        sudo apt-get update -y
-                        sudo apt-get install -y python3-pip
-                      fi
-                    '''
-                    // Install Selenium and run the test
-                    sh '''
-                      pip3 install selenium
-                      python3 selenium-test.py
-                    '''
-                }
+                // Run Selenium test inside a Python Docker container
+                sh """
+                   docker run --rm \
+                     -v "\$PWD":/workspace \
+                     -w /workspace \
+                     python:3.9-slim \
+                     bash -c "pip install selenium && python3 selenium-test.py"
+                """
             }
         }
     }
