@@ -8,7 +8,7 @@ COPY target/insure-me-1.0.jar /usr/app/insure-me.jar
 WORKDIR /usr/app
 
 # Expose the port the app will run on
-EXPOSE 8080
+EXPOSE 8085
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "insure-me.jar"]
