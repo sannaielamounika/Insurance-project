@@ -44,16 +44,19 @@ pipeline {
     stage('Set up Python Environment') {
       steps {
         script {
-          // Create and activate virtual environment
+          // Remove the old virtual environment if it exists
+          sh 'rm -rf venv'
+
+          // Create a new virtual environment
           sh 'python3 -m venv venv'
-          
-          // Fix permissions for the entire virtual environment folder
+
+          // Make the virtual environment executable
           sh 'chmod -R 755 venv'
 
-          // Ensure the right pip version is installed inside the venv
-          sh './venv/bin/python -m pip install --upgrade pip'
+          // Install pip in the virtual environment and upgrade it
+          sh './venv/bin/python -m ensurepip --upgrade'
 
-          // Install dependencies in the virtual environment
+          // Install Selenium in the virtual environment
           sh './venv/bin/pip install selenium'
         }
       }
