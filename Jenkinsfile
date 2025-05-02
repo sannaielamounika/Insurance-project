@@ -22,7 +22,7 @@ pipeline {
     stage('Dockerize Application') {
       steps {
         sh """
-           docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
+           docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} . 
            docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
         """
       }
@@ -43,7 +43,8 @@ pipeline {
 
     stage('Run Tests (Selenium)') {
       steps {
-        sh 'python3 selenium/test_script.py'
+        // Corrected the path and file name to selenium-test.py
+        sh 'python3 selenium-test.py'
       }
     }
   }
