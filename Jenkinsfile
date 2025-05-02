@@ -46,6 +46,11 @@ pipeline {
         script {
           // Create and activate virtual environment
           sh 'python3 -m venv venv'
+          
+          // Fix permissions for the virtual environment's bin folder
+          sh 'chmod -R 755 venv/bin'
+          
+          // Install dependencies in the virtual environment
           sh './venv/bin/pip install --upgrade pip'
           sh './venv/bin/pip install selenium'
         }
