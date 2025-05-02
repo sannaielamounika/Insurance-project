@@ -58,6 +58,13 @@ pipeline {
 
           // Install Selenium in the virtual environment
           sh './venv/bin/pip install selenium'
+
+          // Install Chromium and ChromeDriver
+          sh """
+            sudo apt-get update
+            sudo apt-get install -y chromium-browser
+            sudo apt-get install -y chromium-chromedriver
+          """
         }
       }
     }
@@ -65,7 +72,7 @@ pipeline {
     stage('Run Tests (Selenium)') {
       steps {
         script {
-          // Run the Selenium tests using the virtual environment
+          // Set the path for the Chromium browser explicitly
           sh './venv/bin/python selenium-test.py'
         }
       }
