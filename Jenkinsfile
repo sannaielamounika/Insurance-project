@@ -41,16 +41,30 @@ pipeline {
       }
     }
 
-    stage('Install Dependencies (Global)') {
+    stage('Set up Python Environment') {
       steps {
-        sh 'pip install --upgrade pip'
-        sh 'pip install selenium'
+        script {
+          // Create and activate virtual environment
+          sh 'python3 -m venv venv'
+          
+          // Fix permissions for the entire virtual environment folder
+          sh 'chmod -R 755 venv'
+
+          // Ensure the right pip version is installed inside the venv
+          sh './venv/bin/python -m pip install --upgrade pip'
+
+          // Install dependencies in the virtual environment
+          sh './venv/bin/pip install selenium'
+        }
       }
     }
 
     stage('Run Tests (Selenium)') {
       steps {
-        sh 'python selenium-test.py'
+        script {
+          // Run the Selenium tests using the virtual environment
+          sh './venv/bin/python selenium-test.py'
+        }
       }
     }
   }
