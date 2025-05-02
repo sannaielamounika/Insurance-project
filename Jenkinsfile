@@ -41,10 +41,23 @@ pipeline {
       }
     }
 
+    stage('Set up Python Environment') {
+      steps {
+        script {
+          // Create and activate virtual environment
+          sh 'python3 -m venv venv'
+          sh './venv/bin/pip install --upgrade pip'
+          sh './venv/bin/pip install selenium'
+        }
+      }
+    }
+
     stage('Run Tests (Selenium)') {
       steps {
-        // Corrected the path and file name to selenium-test.py
-        sh 'python3 selenium-test.py'
+        script {
+          // Run the Selenium tests using the virtual environment
+          sh './venv/bin/python selenium-test.py'
+        }
       }
     }
   }
